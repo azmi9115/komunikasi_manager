@@ -1,0 +1,21 @@
+<?php
+session_start();
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'teknik') {
+    header("Location: login.php");
+    exit();
+}
+
+include "db.php";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'];
+    $tanggapan = $_POST['tanggapan'];
+
+    $stmt = $conn->prepare("UPDATE kendala SET tanggapan_teknik = ? WHERE id = ?");
+    $stmt->bind_param("si", $tanggapan, $id);
+    $stmt->execute();
+}
+
+header("Location: dashboard_teknik.php");
+exit();
+?>
